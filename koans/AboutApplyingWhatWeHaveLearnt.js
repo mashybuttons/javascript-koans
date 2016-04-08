@@ -27,18 +27,32 @@ describe("About Applying What We Have Learnt", function() {
                }
             }
             if (!hasMushrooms) productsICanEat.push(products[i]);
+    
         }
     }
 
-    expect(productsICanEat.length).toBe(FILL_ME_IN);
+    expect(productsICanEat.length).toBe(1);
   });
 
   it("given I'm allergic to nuts and hate mushrooms, it should find a pizza I can eat (functional)", function () {
       var productsICanEat = [];
+      // var hasMushrooms = false
 
       /* solve using filter() & all() / any() */
+      // productsICanEat = _.filter(products, function(pizza) {
+      //   if(pizza.containsNuts === false) {
+      //      var hasMushrooms = _.some(pizza.ingredients, function(ing) { return ing === "mushrooms"})
+      //       return  !hasMushrooms
+           
+      //   }
+      // })
+      productsICanEat = _.filter(products, function(pizza) {
+        return pizza.containsNuts === false && 
+        !_.some(pizza.ingredients, function(ing) {
+           return ing === "mushrooms"})
+      })
 
-      expect(productsICanEat.length).toBe(FILL_ME_IN);
+      expect(productsICanEat.length).toBe(1);
   });
 
   /*********************************************************************************/
@@ -48,17 +62,33 @@ describe("About Applying What We Have Learnt", function() {
 
     for(var i=1; i<1000; i+=1) {
       if (i % 3 === 0 || i % 5 === 0) {
+
         sum += i;
       }
     }
     
-    expect(sum).toBe(FILL_ME_IN);
+    expect(sum).toBe(233168);
   });
 
   it("should add all the natural numbers below 1000 that are multiples of 3 or 5 (functional)", function () {
-    var sum = FILL_ME_IN;    /* try chaining range() and reduce() */
+       /* try chaining range() and reduce() */
 
-    expect(233168).toBe(FILL_ME_IN);
+    
+    // var sum = _.reduce(_.range(1, 1000), function(sum, num){
+    //   if(num % 3 === 0 || num % 5 === 0) {
+    //    return sum + num;
+    // } 
+    //   return sum;
+    // }, 0)
+    var sum = _.chain(1).range(1000)
+      .reduce(function(sum, num){
+        if(num % 3 === 0 || num % 5 === 0) {
+         return sum + num;
+        } 
+        return sum;
+      }, 0)
+      .value();
+    expect(233168).toBe(sum);
   });
 
   /*********************************************************************************/
@@ -71,39 +101,74 @@ describe("About Applying What We Have Learnt", function() {
         }
     }
 
-    expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
 
   it("should count the ingredient occurrence (functional)", function () {
     var ingredientCount = { "{ingredient name}": 0 };
 
     /* chain() together map(), flatten() and reduce() */
+    
+    ingredientCount = _.chain(products)
+      .map(function(pizza) {return pizza.ingredients})
+      .flatten()
+      .reduce(function(acc, ing) {
+        if(!acc[ing]) {
+          acc[ing] = 1
+        } else {
+           acc[ing]++
+        }
+        return acc
+      }, {})
+      .value();
 
-    expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+    
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
 
   /*********************************************************************************/
   /* UNCOMMENT FOR ADVANCED */
-  /*
-  it("should find the largest prime factor of a composite number", function () {
   
-  });
+  it("should find the largest prime factor of a composite number", 
+    function(n) {
+  
+    var factors = [];
+    var primefactor = 0;
 
-  it("should find the largest palindrome made from the product of two 3 digit numbers", function () {
+    for(var i = 0; i <= n; i++) {
+      if(n%i === 0) {
+        factors.push(i)
+      }
+    }
+
+    _.each(factors, function(factor) { 
+      if(factor <= 3) {
+        primefactor = factor
+      } else if(factor %2 !== 0 && factor% 3 !== 0) {
+        primefactor = factor
+      }
+    })
+
+    return primefactor
     
+ 
   });
 
-  it("should find the smallest number divisible by each of the numbers 1 to 20", function () {
+  // it("should find the largest palindrome made from the product of two 3 digit numbers", function () {
+    
+  // });
+
+  // it("should find the smallest number divisible by each of the numbers 1 to 20", function () {
       
     
-  });
+  // });
 
-  it("should find the difference between the sum of the squares and the square of the sums", function () {
+  // it("should find the difference between the sum of the squares and the square of the sums", function () {
     
-  });
+  // });
 
-  it("should find the 10001st prime", function () {
+  // it("should find the 10001st prime", function () {
 
-  });
-  */
+  // });
+  
 });
